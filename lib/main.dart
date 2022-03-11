@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:purple_store/pages/product_detail_page.dart';
 import 'package:purple_store/pages/products_overview_page.dart';
+import 'package:purple_store/utils/app_routes.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: ProductsOverviewPage(),
+      routes: {
+        AppRoutes.PRODUCT_DETAIL: (context) => ProductDetailPage(),
+      },
     );
   }
 }
