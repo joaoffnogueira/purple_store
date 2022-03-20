@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:purple_store/components/product_item.dart';
-import 'package:purple_store/data/dummy_data.dart';
 import 'package:purple_store/models/products.dart';
+import '../models/product_list.dart';
 
 class ProductsOverviewPage extends StatelessWidget {
-  List<Product> loadedProducts = dummyProducts;
+  
 
   ProductsOverviewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final List<Product> loadedProducts = Provider.of<ProductList>(context).itens;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Purple Store'),
