@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:purple_store/models/products.dart';
-import 'package:purple_store/pages/product_detail_page.dart';
 import 'package:purple_store/utils/app_routes.dart';
 
 class ProductItem extends StatelessWidget {
@@ -40,7 +39,7 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {},
           ),
