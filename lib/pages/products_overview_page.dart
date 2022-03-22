@@ -1,16 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:purple_store/components/product_grid.dart';
+import 'package:purple_store/models/product_list.dart';
 
-class ProductsOverviewPage extends StatelessWidget {
+enum FilterOptions {
+  favorites,
+  all,
+}
+
+class ProductsOverviewPage extends StatefulWidget {
   const ProductsOverviewPage({Key? key}) : super(key: key);
+
+  @override
+  State<ProductsOverviewPage> createState() => _ProductsOverviewPageState();
+}
+
+class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
+  bool _showOnlyFavorites = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Purple Store'),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                child: Text('Somente Favoritos'),
+                value: FilterOptions.favorites,
+              ),
+              const PopupMenuItem(
+                child: Text('Todos'),
+                value: FilterOptions.all,
+              ),
+            ],
+            onSelected: (FilterOptions selectedValue) {
+              setState(
+                () {
+                  if (selectedValue == FilterOptions.favorites) {
+                    _showOnlyFavorites = true;
+                  } else {
+                    _showOnlyFavorites = false;
+                  }
+                },
+              );
+            },
+          ),
+        ],
       ),
-      body: const ProductGrid(),
+      body: ProductGrid(
+        showOnlyFavorites: _showOnlyFavorites,
+      ),
     );
   }
 }

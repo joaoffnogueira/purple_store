@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purple_store/components/product_item.dart';
@@ -5,12 +7,17 @@ import 'package:purple_store/models/product_list.dart';
 import 'package:purple_store/models/products.dart';
 
 class ProductGrid extends StatelessWidget {
-  const ProductGrid({Key? key}) : super(key: key);
+  final bool showOnlyFavorites;
+
+  const ProductGrid({required this.showOnlyFavorites, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ProductList>(context);
     final List<Product> loadedProducts =
-        Provider.of<ProductList>(context).itens;
+        showOnlyFavorites ? provider.favoriteItens : provider.itens;
+
     return GridView.builder(
       padding: const EdgeInsets.all(10),
       itemCount: loadedProducts.length,
@@ -22,7 +29,7 @@ class ProductGrid extends StatelessWidget {
       ),
       itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
         value: loadedProducts[index],
-        child: const ProductItem(),
+        child: ProductItem(),
       ),
     );
   }
