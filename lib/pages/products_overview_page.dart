@@ -4,6 +4,7 @@ import 'package:purple_store/components/badge.dart';
 import 'package:purple_store/components/product_grid.dart';
 import 'package:purple_store/models/cart.dart';
 import 'package:purple_store/models/product_list.dart';
+import 'package:purple_store/utils/app_routes.dart';
 
 enum FilterOptions {
   favorites,
@@ -52,7 +53,9 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           ),
           Consumer<Cart>(
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.CART);
+              },
               icon: const Icon(Icons.shopping_cart),
             ),
             builder: (context, cart, child) => Badge(
