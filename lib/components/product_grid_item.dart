@@ -4,8 +4,8 @@ import 'package:purple_store/models/cart.dart';
 import 'package:purple_store/models/products.dart';
 import 'package:purple_store/utils/app_routes.dart';
 
-class ProductItem extends StatelessWidget {
-  const ProductItem({Key? key}) : super(key: key);
+class ProductGridItem extends StatelessWidget {
+  const ProductGridItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +51,18 @@ class ProductItem extends StatelessWidget {
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Produto adicionado ao carrinho!'),
+                  duration: const Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: 'DESFAZER',
+                    onPressed: () {
+                      cart.removeSingleItem(product.id);
+                    },
+                  ),
+                ),
+              );
               cart.addItem(product);
             },
           ),
