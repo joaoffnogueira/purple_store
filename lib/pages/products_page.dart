@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:purple_store/components/app_drawer.dart';
 import 'package:purple_store/components/product_item.dart';
 import 'package:purple_store/models/product_list.dart';
+import 'package:purple_store/utils/app_routes.dart';
 
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -14,6 +15,16 @@ class ProductsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Gerenciar Produtos'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.PRODUCT_FORM,
+                );
+              },
+            ),
+          ],
         ),
         drawer: AppDrawer(),
         body: Padding(
