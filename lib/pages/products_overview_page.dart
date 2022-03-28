@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:purple_store/components/badge.dart';
 import 'package:purple_store/components/product_grid.dart';
+import 'package:purple_store/models/cart.dart';
 import 'package:purple_store/models/product_list.dart';
 
 enum FilterOptions {
@@ -48,6 +50,17 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
               );
             },
           ),
+          Consumer<Cart>(
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.shopping_cart),
+            ),
+            builder: (context, cart, child) => Badge(
+              value: cart.itemCount.toString(),
+              color: Colors.red,
+              child: child!,
+            ),
+          )
         ],
       ),
       body: ProductGrid(

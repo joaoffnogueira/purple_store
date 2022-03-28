@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:purple_store/models/products.dart';
 import 'cart_item.dart';
 
 class Cart with ChangeNotifier {
@@ -20,10 +21,10 @@ class Cart with ChangeNotifier {
     return total;
   }
 
-  void addItem(String productId, double price, String title) {
-    if (_items.containsKey(productId)) {
+  void addItem(Product product) {
+    if (_items.containsKey(product.id)) {
       _items.update(
-        productId,
+        product.id,
         (existingCartItem) => CartItem(
           id: existingCartItem.id,
           productId: existingCartItem.productId,
@@ -34,12 +35,12 @@ class Cart with ChangeNotifier {
       );
     } else {
       _items.putIfAbsent(
-        productId,
+        product.id,
         () => CartItem(
           id: DateTime.now().toString(),
-          productId: productId,
-          title: title,
-          price: price,
+          productId: product.id,
+          title: product.title,
+          price: product.price,
           quantity: 1,
         ),
       );
