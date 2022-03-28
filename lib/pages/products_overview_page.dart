@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:purple_store/components/app_drawer.dart';
 import 'package:purple_store/components/badge.dart';
 import 'package:purple_store/components/product_grid.dart';
 import 'package:purple_store/models/cart.dart';
@@ -69,6 +70,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
       body: ProductGrid(
         showOnlyFavorites: _showOnlyFavorites,
       ),
+      drawer: const AppDrawer(),
     );
   }
 }
