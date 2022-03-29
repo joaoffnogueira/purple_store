@@ -48,4 +48,12 @@ class ProductList with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void removeProduct(Product product) {
+    final index = _itens.indexWhere((prod) => prod.id == product.id);
+    if (index >= 0) {
+      _itens.removeWhere((prod) => prod.id == product.id);
+      notifyListeners();
+    }
+  }
 }

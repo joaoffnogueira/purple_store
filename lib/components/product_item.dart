@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:purple_store/models/product_list.dart';
 import 'package:purple_store/models/products.dart';
 import 'package:purple_store/utils/app_routes.dart';
 
@@ -26,7 +28,29 @@ class ProductItem extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text('Excluir Produto'),
+                        content: Text(
+                            'Tem certeza que deseja excluir o produto ${product.title}?'),
+                        actions: [
+                          TextButton(
+                            child: Text('Não'),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          TextButton(
+                            child: Text('Sim, excluir'),
+                            onPressed: () {
+                              Provider.of<ProductList>(context, listen: false)
+                                  .removeProduct(product);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ));
+            },
             icon: Icon(Icons.delete),
             color: Theme.of(context).colorScheme.error,
           ),
