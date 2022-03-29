@@ -24,6 +24,24 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_formData.isEmpty) {
+      final product = ModalRoute.of(context)?.settings.arguments as Product;
+      if (product != null) {
+        _formData['id'] = product.id;
+        _formData['name'] = product.title;
+        _formData['description'] = product.description;
+        _formData['price'] = product.price;
+        _formData['imageUrl'] = product.imageUrl;
+        _imageController.text = product.imageUrl;
+      } else {
+        _formData['price'] = '';
+      }
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _imageController.removeListener(updateImage);
@@ -47,8 +65,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
       return;
     }
     _formKey.currentState?.save();
-    Provider.of<ProductList>(context, listen: false)
-        .addProductFromData(_formData);
+    Provider.of<ProductList>(context, listen: false).saveProduct(_formData);
     Navigator.of(context).pop();
   }
 
@@ -70,6 +87,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             padding: const EdgeInsets.all(15),
             children: [
               TextFormField(
+                initialValue: _formData['name']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Nome',
                 ),
@@ -88,6 +106,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 },
               ),
               TextFormField(
+                initialValue: _formData['description']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
                 ),
@@ -108,6 +127,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 },
               ),
               TextFormField(
+                initialValue: _formData['price']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Preço',
                 ),
