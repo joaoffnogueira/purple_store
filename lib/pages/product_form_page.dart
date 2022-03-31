@@ -178,9 +178,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     child: Center(
                         child: _imageController.text.isEmpty
                             ? Text('Informe a URL da imagem')
-                            : FittedBox(
-                                child: Image.network(_imageController.text),
-                                fit: BoxFit.cover,
+                            : Container(
+                                width: 100,
+                                height: 100,
+                                child: FittedBox(
+                                  child: Image.network(_imageController.text),
+                                  fit: BoxFit.cover,
+                                ),
                               )),
                   ),
                 ],
