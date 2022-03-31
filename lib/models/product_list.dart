@@ -8,7 +8,7 @@ import 'package:purple_store/utils/key.dart';
 
 class ProductList with ChangeNotifier {
   final List<Product> _itens = dummyProducts;
-  final _baseUrl = Keys.remoteDataBase;
+  final _url = Uri.parse('${Keys.remoteDataBase}/products.json');
 
   List<Product> get itens {
     return [..._itens];
@@ -20,6 +20,26 @@ class ProductList with ChangeNotifier {
 
   int get itemCount {
     return _itens.length;
+  }
+
+  Future<void> loadProducts() async {
+    final response = await http.get(_url);
+    if (response.body == 'null') return;
+    final List<Product> loadedProducts = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    extractedData.forEach((prodId, prodData) {
+      loadedProducts.add(Product(
+        id: prodId,
+        title: prodData['title'],
+        description: prodData['description'],
+        price: prodData['price'],
+        imageUrl: prodData['imageUrl'],
+        isFavorite: prodData['isFavorite'],
+      ));
+    });
+    _itens.clear();
+    _itens.addAll(loadedProducts);
+    notifyListeners();
   }
 
   Future<void> saveProduct(Map<String, Object> data) {
@@ -41,7 +61,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/products.json'),
+      _url,
       body: jsonEncode({
         'title': product.title,
         'description': product.description,
