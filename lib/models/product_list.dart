@@ -82,13 +82,21 @@ class ProductList with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     final index = _itens.indexWhere((prod) => prod.id == product.id);
     if (index >= 0) {
+      await http.patch(
+        Uri.parse('${Keys.remoteDataBase}products/${product.id}.json'),
+        body: jsonEncode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+        }),
+      );
       _itens[index] = product;
       notifyListeners();
     }
-    return Future.value();
   }
 
   void removeProduct(Product product) {
