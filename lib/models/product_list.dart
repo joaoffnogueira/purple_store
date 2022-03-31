@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:purple_store/data/dummy_data.dart';
 import 'package:purple_store/models/products.dart';
+import 'package:purple_store/utils/key.dart';
 
 class ProductList with ChangeNotifier {
   final List<Product> _itens = dummyProducts;
+  final _baseUrl = Keys.remoteDataBase;
 
   List<Product> get itens {
     return [..._itens];
@@ -37,6 +40,16 @@ class ProductList with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    http.post(
+      Uri.parse('$_baseUrl/products.json'),
+      body: jsonEncode({
+        'title': product.title,
+        'description': product.description,
+        'price': product.price,
+        'imageUrl': product.imageUrl,
+        'isFavorite': product.isFavorite,
+      }),
+    );
     _itens.add(product);
     notifyListeners();
   }

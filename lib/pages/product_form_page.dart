@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purple_store/models/product_list.dart';
@@ -26,7 +25,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_formData.isEmpty) {
+    if (_formData.isEmpty &&
+        ModalRoute.of(context)?.settings.arguments != null) {
       final product = ModalRoute.of(context)?.settings.arguments as Product;
       if (product != null) {
         _formData['id'] = product.id;
@@ -178,13 +178,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     child: Center(
                         child: _imageController.text.isEmpty
                             ? Text('Informe a URL da imagem')
-                            : Container(
-                                width: 100,
-                                height: 100,
-                                child: FittedBox(
-                                  child: Image.network(_imageController.text),
-                                  fit: BoxFit.cover,
-                                ),
+                            : FittedBox(
+                                child: Image.network(_imageController.text),
+                                fit: BoxFit.cover,
+                                clipBehavior: Clip.hardEdge,
                               )),
                   ),
                 ],

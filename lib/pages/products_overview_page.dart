@@ -4,7 +4,6 @@ import 'package:purple_store/components/app_drawer.dart';
 import 'package:purple_store/components/badge.dart';
 import 'package:purple_store/components/product_grid.dart';
 import 'package:purple_store/models/cart.dart';
-import 'package:purple_store/models/product_list.dart';
 import 'package:purple_store/utils/app_routes.dart';
 
 enum FilterOptions {
