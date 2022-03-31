@@ -8,6 +8,10 @@ import 'package:purple_store/utils/app_routes.dart';
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key? key}) : super(key: key);
 
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<ProductList>(context, listen: false).loadProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<ProductList>(context);
@@ -27,18 +31,21 @@ class ProductsPage extends StatelessWidget {
           ],
         ),
         drawer: AppDrawer(),
-        body: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView.builder(
-            itemCount: products.itemCount,
-            itemBuilder: ((context, index) => Column(
-                  children: [
-                    ProductItem(
-                      product: products.itens[index],
-                    ),
-                    Divider(),
-                  ],
-                )),
+        body: RefreshIndicator(
+          onRefresh: () => _refreshProducts(context),
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: ListView.builder(
+              itemCount: products.itemCount,
+              itemBuilder: ((context, index) => Column(
+                    children: [
+                      ProductItem(
+                        product: products.itens[index],
+                      ),
+                      Divider(),
+                    ],
+                  )),
+            ),
           ),
         ));
   }
