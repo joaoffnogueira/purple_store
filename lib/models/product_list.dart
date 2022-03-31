@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:purple_store/data/dummy_data.dart';
+import 'package:purple_store/exceptions/http_exception.dart';
 import 'package:purple_store/models/products.dart';
 import 'package:purple_store/utils/key.dart';
 
@@ -99,11 +100,23 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  void removeProduct(Product product) {
+  Future<void> removeProduct(Product product) async {
     final index = _itens.indexWhere((prod) => prod.id == product.id);
     if (index >= 0) {
-      _itens.removeWhere((prod) => prod.id == product.id);
+      final product = _itens[index];
+      _itens.remove(product);
       notifyListeners();
+
+      final response = await http.delete(
+        Uri.parse('${Keys.remoteDataBase}products/${product.id}.json'),
+      );
+      if (response.statusCode >= 400) {
+        _itens.insert(index, product);
+        notifyListeners();
+        throw HttpException(
+            message: 'Não foi possível excluir o produto.',
+            statusCode: response.statusCode);
+      }
     }
   }
 }
