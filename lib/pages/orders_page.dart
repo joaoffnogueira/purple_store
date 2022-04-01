@@ -4,8 +4,25 @@ import 'package:purple_store/components/app_drawer.dart';
 import 'package:purple_store/components/order_widget.dart';
 import 'package:purple_store/models/order_list.dart';
 
-class OrdersPage extends StatelessWidget {
+class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
+
+  @override
+  State<OrdersPage> createState() => _OrdersPageState();
+}
+
+class _OrdersPageState extends State<OrdersPage> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<OrderList>(context, listen: false).loadOrders().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +33,7 @@ class OrdersPage extends StatelessWidget {
         title: const Text('Pedidos'),
       ),
       drawer: const AppDrawer(),
-      body: ListView.builder(
+      body: _isLoading ? const Center(child: CircularProgressIndicator()) : ListView.builder(
         itemCount: orders.ordersCount,
         itemBuilder: (context, index) {
           return OrderWidget(

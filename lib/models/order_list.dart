@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:purple_store/models/cart.dart';
+import 'package:purple_store/models/cart_item.dart';
 import 'package:purple_store/models/order.dart';
 import 'package:purple_store/utils/key.dart';
 
@@ -44,6 +45,35 @@ class OrderList with ChangeNotifier {
         dateTime: date,
       ),
     );
+    notifyListeners();
+  }
+
+  Future<void> loadOrders() async {
+    final response =
+        await http.get(Uri.parse('${Keys.remoteDataBase}/orders.json'));
+    if (response.body == 'null') return;
+    final List<Order> loadedOrders = [];
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    extractedData.forEach((orderId, orderData) {
+      loadedOrders.add(Order(
+        id: orderId,
+        dateTime: DateTime.parse(orderData['dateTime']),
+        products: (orderData['products'] as List<dynamic>)
+            .map(
+              (item) => CartItem(
+                id: item['id'],
+                productId: item['productId'],
+                price: item['price'],
+                quantity: item['quantity'],
+                title: item['title'],
+              ),
+            )
+            .toList(),
+        total: orderData['amount'],
+      ));
+    });
+    _orders.clear();
+    _orders.addAll(loadedOrders);
     notifyListeners();
   }
 }
