@@ -4,13 +4,12 @@ import 'package:purple_store/models/auth.dart';
 import 'package:purple_store/models/cart.dart';
 import 'package:purple_store/models/order_list.dart';
 import 'package:purple_store/models/product_list.dart';
-import 'package:purple_store/pages/auth_page.dart';
+import 'package:purple_store/pages/auth_or_home_page.dart';
 import 'package:purple_store/pages/cart_page.dart';
 import 'package:purple_store/pages/orders_page.dart';
 import 'package:purple_store/pages/product_detail_page.dart';
 import 'package:purple_store/pages/product_form_page.dart';
 import 'package:purple_store/pages/products_page.dart';
-import 'package:purple_store/pages/products_overview_page.dart';
 import 'package:purple_store/utils/app_routes.dart';
 
 void main() {
@@ -27,6 +26,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => ProductList(),
         ),
         ChangeNotifierProvider(
@@ -34,9 +36,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => OrderList(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Auth(),
         ),
       ],
       child: MaterialApp(
@@ -57,8 +56,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         routes: {
-          AppRoutes.AUTH: (ctx) => const AuthPage(),
-          AppRoutes.HOME: (context) => const ProductsOverviewPage(),
+          AppRoutes.AUTH_OR_HOME: (ctx) => const AuthOrHomePage(),
           AppRoutes.PRODUCT_DETAIL: (context) => const ProductDetailPage(),
           AppRoutes.CART: (context) => const CartPage(),
           AppRoutes.ORDERS: (context) => const OrdersPage(),
