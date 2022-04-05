@@ -8,8 +8,11 @@ import 'package:purple_store/models/products.dart';
 import 'package:purple_store/utils/key.dart';
 
 class ProductList with ChangeNotifier {
-  final List<Product> _itens = dummyProducts;
-  final _url = Uri.parse('${Keys.remoteDataBase}/products.json');
+  List<Product> _itens = [];
+  final String _token;
+  final _url = '${Keys.remoteDataBase}/products.json';
+
+  ProductList(this._token, this._itens);
 
   List<Product> get itens {
     return [..._itens];
@@ -24,7 +27,7 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final response = await http.get(_url);
+    final response = await http.get(Uri.parse('$_url?auth=$_token'));
     if (response.body == 'null') return;
     final List<Product> loadedProducts = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -62,7 +65,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      _url,
+      Uri.parse('$_url?auth=$_token'),
       body: jsonEncode({
         'title': product.title,
         'description': product.description,
@@ -87,7 +90,8 @@ class ProductList with ChangeNotifier {
     final index = _itens.indexWhere((prod) => prod.id == product.id);
     if (index >= 0) {
       await http.patch(
-        Uri.parse('${Keys.remoteDataBase}products/${product.id}.json'),
+        Uri.parse(
+            '${Keys.remoteDataBase}products/${product.id}.json?auth=$_token'),
         body: jsonEncode({
           'title': product.title,
           'description': product.description,
@@ -108,7 +112,8 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await http.delete(
-        Uri.parse('${Keys.remoteDataBase}products/${product.id}.json'),
+        Uri.parse(
+            '${Keys.remoteDataBase}products/${product.id}.json?auth=$_token'),
       );
       if (response.statusCode >= 400) {
         _itens.insert(index, product);

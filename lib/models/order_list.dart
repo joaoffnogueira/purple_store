@@ -7,7 +7,10 @@ import 'package:purple_store/models/order.dart';
 import 'package:purple_store/utils/key.dart';
 
 class OrderList with ChangeNotifier {
+  final String _token;
   List<Order> _orders = [];
+
+  OrderList(this._token, this._orders);
 
   List<Order> get orders {
     return [..._orders];
@@ -20,7 +23,7 @@ class OrderList with ChangeNotifier {
   Future<void> addOrder(Cart cart) async {
     final date = DateTime.now();
     final response = await http.post(
-      Uri.parse('${Keys.remoteDataBase}/orders.json'),
+      Uri.parse('${Keys.remoteDataBase}/orders.json?auth=$_token'),
       body: jsonEncode({
         'amount': cart.totalAmount,
         'dateTime': date.toIso8601String(),
@@ -49,8 +52,8 @@ class OrderList with ChangeNotifier {
   }
 
   Future<void> loadOrders() async {
-    final response =
-        await http.get(Uri.parse('${Keys.remoteDataBase}/orders.json'));
+    final response = await http
+        .get(Uri.parse('${Keys.remoteDataBase}/orders.json?auth=$_token'));
     if (response.body == 'null') return;
     final List<Order> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -72,8 +75,7 @@ class OrderList with ChangeNotifier {
         total: orderData['amount'],
       ));
     });
-    _orders.clear();
-    _orders.addAll(loadedOrders);
+    _orders = loadedOrders.reversed.toList();
     notifyListeners();
   }
 }

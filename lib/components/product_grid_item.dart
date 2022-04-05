@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:purple_store/models/auth.dart';
 import 'package:purple_store/models/cart.dart';
 import 'package:purple_store/models/products.dart';
 import 'package:purple_store/utils/app_routes.dart';
@@ -17,6 +18,11 @@ class ProductGridItem extends StatelessWidget {
       context,
       listen: false,
     );
+    final auth = Provider.of<Auth>(
+      context,
+      listen: false,
+    );
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -39,7 +45,7 @@ class ProductGridItem extends StatelessWidget {
               ),
               color: Theme.of(context).colorScheme.secondary,
               onPressed: () {
-                product.toggleFavorite();
+                product.toggleFavorite(auth.token ?? '');
               },
             ),
           ),
