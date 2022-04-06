@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:purple_store/data/dummy_data.dart';
 import 'package:purple_store/exceptions/http_exception.dart';
 import 'package:purple_store/models/products.dart';
 import 'package:purple_store/utils/key.dart';
@@ -10,9 +9,14 @@ import 'package:purple_store/utils/key.dart';
 class ProductList with ChangeNotifier {
   List<Product> _itens = [];
   final String _token;
+  final String _userId;
   final _url = '${Keys.remoteDataBase}/products.json';
 
-  ProductList(this._token, this._itens);
+  ProductList([
+    this._token = '',
+    this._userId = '',
+    this._itens = const [],
+  ]);
 
   List<Product> get itens {
     return [..._itens];
@@ -29,16 +33,24 @@ class ProductList with ChangeNotifier {
   Future<void> loadProducts() async {
     final response = await http.get(Uri.parse('$_url?auth=$_token'));
     if (response.body == 'null') return;
+    final favoritesResponse = await http.get(
+      Uri.parse(
+          '${Keys.remoteDataBase}userFavorite/$_userId.json?auth=$_token'),
+    );
+    Map<String, dynamic> favData = favoritesResponse.body == 'null'
+        ? {}
+        : json.decode(favoritesResponse.body);
     final List<Product> loadedProducts = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
     extractedData.forEach((prodId, prodData) {
+      final isFavorite = favData[prodId] ?? false;
       loadedProducts.add(Product(
         id: prodId,
         title: prodData['title'],
         description: prodData['description'],
         price: prodData['price'],
         imageUrl: prodData['imageUrl'],
-        isFavorite: prodData['isFavorite'],
+        isFavorite: isFavorite,
       ));
     });
     _itens.clear();
@@ -71,7 +83,6 @@ class ProductList with ChangeNotifier {
         'description': product.description,
         'price': product.price,
         'imageUrl': product.imageUrl,
-        'isFavorite': product.isFavorite,
       }),
     );
     final id = json.decode(response.body)['name'];
@@ -81,7 +92,6 @@ class ProductList with ChangeNotifier {
       description: product.description,
       price: product.price,
       imageUrl: product.imageUrl,
-      isFavorite: product.isFavorite,
     ));
     notifyListeners();
   }
