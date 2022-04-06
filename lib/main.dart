@@ -11,6 +11,7 @@ import 'package:purple_store/pages/product_detail_page.dart';
 import 'package:purple_store/pages/product_form_page.dart';
 import 'package:purple_store/pages/products_page.dart';
 import 'package:purple_store/utils/app_routes.dart';
+import 'package:purple_store/utils/custom_route.dart';
 
 void main() {
   runApp(MyApp());
@@ -52,6 +53,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: tema.copyWith(
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CustomPageTransitionBuilder(),
+              TargetPlatform.iOS: CustomPageTransitionBuilder(),
+            },
+          ),
           colorScheme: tema.colorScheme.copyWith(
             primary: Colors.deepPurple,
             secondary: Colors.deepPurpleAccent,
