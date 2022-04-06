@@ -22,39 +22,44 @@ class AuthPage extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 70,
-                  vertical: 10,
-                ),
-                transform: Matrix4.rotationZ(-8 * pi / 180)..translate(-10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.deepPurple.shade900,
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(0, 5),
-                      blurRadius: 10,
-                      color: Colors.black26,
+        Center(
+          child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 70,
+                      vertical: 10,
                     ),
-                  ],
-                ),
-                child: Text('Purple Store',
-                    style: TextStyle(
-                        fontSize: 50,
-                        fontFamily: 'Anton',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                    transform: Matrix4.rotationZ(-8 * pi / 180)
+                      ..translate(-10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.deepPurple.shade900,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(0, 5),
+                          blurRadius: 10,
+                          color: Colors.black26,
+                        ),
+                      ],
+                    ),
+                    child: Text('Purple Store',
+                        style: TextStyle(
+                            fontSize: 50,
+                            fontFamily: 'Anton',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                  ),
+                  AuthForm(),
+                ],
               ),
-              AuthForm(),
-            ],
+            ),
           ),
         ),
       ],
