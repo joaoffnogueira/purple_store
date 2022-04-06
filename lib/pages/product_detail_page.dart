@@ -21,9 +21,12 @@ class ProductDetailPage extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             height: 300,
             width: double.infinity,
-            child: Image.network(
-              product.imageUrl,
-              fit: BoxFit.cover,
+            child: Hero(
+              tag: product.id,
+              child: Image.network(
+                product.imageUrl,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 10),
