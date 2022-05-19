@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.purple_store">
    <application
-        android:label="purple_store"
+        android:label="Purple Store"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
